@@ -32,6 +32,9 @@ public class User {
     
     @OneToMany
     private List<Course> coursesCreated = new ArrayList<>();
+    
+    @OneToMany
+    private List<Enrollment> usersEnrollments = new ArrayList<>();
 
     public User() {
     }
@@ -41,7 +44,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.roles = roles;
-    }
+    }  
 
     public UUID getId() {
         return id;
@@ -74,7 +77,23 @@ public class User {
     public void setRoles(Roles roles) {
         this.roles = roles;
     }
-    
+
+    public List<Course> getCoursesCreated() {
+        return coursesCreated;
+    }
+
+    public void setCoursesCreated(List<Course> coursesCreated) {
+        this.coursesCreated = coursesCreated;
+    }
+
+    public List<Enrollment> getUsersEnrollments() {
+        return usersEnrollments;
+    }
+
+    public void setUsersEnrollments(List<Enrollment> usersEnrollments) {
+        this.usersEnrollments = usersEnrollments;
+    }
+      
 }
 
 
