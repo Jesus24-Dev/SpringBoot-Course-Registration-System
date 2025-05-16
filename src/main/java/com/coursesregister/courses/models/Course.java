@@ -25,7 +25,7 @@ public class Course {
     @ManyToOne
     private User createdBy;
     
-    @OneToMany
+    @OneToMany(mappedBy = "course")
     private List<Enrollment> coursesEnrollments = new ArrayList<>();
 
     public Course() {

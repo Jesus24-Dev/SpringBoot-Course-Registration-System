@@ -30,10 +30,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Roles roles;
     
-    @OneToMany
+    @OneToMany(mappedBy = "createdBy")
     private List<Course> coursesCreated = new ArrayList<>();
     
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Enrollment> usersEnrollments = new ArrayList<>();
 
     public User() {
