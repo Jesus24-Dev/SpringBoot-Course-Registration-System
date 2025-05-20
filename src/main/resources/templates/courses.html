@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <main sec:authenticated="name">
+            <section sec:authorize="hasRole('ADMIN')">
+                <h2>My courses</h2>
+                <table th:unless="${courses.empty}">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>See</th>
+                            <th>Actions</th>
+                        </tr>                
+                    </thead>
+                    <tbody>
+                        <tr th:each="course : ${courses}">
+                            <td th:text="${course.title}"></td>
+                            <td><a th:href="@{/courses/{id}(id=${course.id})}">Go</a></td>
+                            <td>
+                                <form th:action="@{/admin/update/{id}(id=${course.id})}" th:method="POST">
+                                    <button type="submit">Edit</button>
+                                </form>
+                                <form th:action="@{/admin/delete/{id}(id=${course.id})}" th:method="POST">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${courses.empty}">No courses created.</div>
+                
+                <h2>Create course</h2>
+                <form th:action="@{/admin/create}" th:method="POST" th:object="${course}">
+                    <div>
+                        <label>Title</label>
+                        <input type="text" name="title" id="title" th:field="*{title}">
+                        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                    </div>
+                    <div>
+                        <label>Description</label>
+                        <textarea name="description" id="description" th:field="*{description}"><textarea>
+                        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                    </div>
+                    <button type="submit">Create course</button>
+                </form>
+            </section>
+            <div sec:authorize="hasRole('USER')">
+                <h2>My courses</h2>
+                <table th:unless="${courses.empty}">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Actions</th>
+                        </tr>                
+                    </thead>
+                    <tbody>
+                        <tr th:each="course : ${courses}">
+                            <td th:text="${course.title}"></td>
+                            <td>
+                                <form th:action="@{/admin/delete/{id}(id=${course.id})}" th:method="POST">
+                                    <button type="submit">Join</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </body>
+</html>
