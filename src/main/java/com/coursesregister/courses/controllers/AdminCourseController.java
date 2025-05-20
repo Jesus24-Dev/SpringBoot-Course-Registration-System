@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,38 +26,48 @@ public class AdminCourseController {
     private final CourseService courseService;
     
     @Autowired
-    public AdminCourseController(CourseService courseService){
+    public AdminCourseController(CourseService courseService) {
         this.courseService = courseService;
     }
     
     @GetMapping("/courses")
-    public String getAdminCourses(Model model, Principal principal){
+    public String getAdminCourses(Model model, Principal principal) {
         List<Course> coursesList = courseService.getCoursesByAdmin(principal.getName());
         model.addAttribute("courses", coursesList);
-        
-        return "courses";  
+        model.addAttribute("course", new CourseRequest()); 
+        return "courses"; 
     }
     
     @PostMapping("/create")
-    public String createCourse(@Valid @ModelAttribute("course") CourseRequest course, BindingResult result){
-        if(result.hasErrors()){
-            return "register";
+    public String createCourse(@Valid @ModelAttribute("course") CourseRequest course, 
+                               BindingResult result, 
+                               Model model, 
+                               Principal principal,
+                               RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            List<Course> coursesList = courseService.getCoursesByAdmin(principal.getName());
+            model.addAttribute("courses", coursesList);
+            return "courses";
         }
-        
-        courseService.createCourse(course.getTitle(), course.getDescription(), course.getUsername());     
-        return "redirect:courses?created=true";
+
+        courseService.createCourse(course.getTitle(), course.getDescription(), principal.getName());
+        redirectAttributes.addFlashAttribute("successMessage", "Course created succesfully");
+        return "redirect:/admin/courses";
     }
     
-    @PostMapping("/create/{id}")
-    public String updateCourseDescription(@PathVariable UUID id, String description){
+    @PostMapping("/update/{id}")
+    public String updateCourseDescription(@PathVariable UUID id, 
+                                        @RequestParam String description,
+                                        RedirectAttributes redirectAttributes) {
         courseService.updateCourseDescription(description, id);
-        
-        return "redirect:courses?updated=true";
+        redirectAttributes.addFlashAttribute("successMessage", "Course updated succesfully");
+        return "redirect:/admin/courses";
     }
     
     @PostMapping("/delete/{id}")
-    public String deleteCourse(@PathVariable UUID id){
+    public String deleteCourse(@PathVariable UUID id, RedirectAttributes redirectAttributes) {
         courseService.deleteCourse(id);
-        return "redirect:courses?deleted=true";
+        redirectAttributes.addFlashAttribute("successMessage", "Course deleted succesfully");
+        return "redirect:/admin/courses";
     }
 }
