@@ -7,6 +7,15 @@
     </head>
     <body>
         <h2>Login</h2>
+        <div th:if="${param.created != null}">
+            User created! Start session now.
+        </div>
+        <div th:if="${param.error != null}">
+            There is an error login user.
+        </div>
+        <div th:if="${param.logout != null}">
+            User logout succesfully.
+        </div>
         <form th:action="@{/auth}" th:method="POST">
             <div>
                 <label>Username</label>
