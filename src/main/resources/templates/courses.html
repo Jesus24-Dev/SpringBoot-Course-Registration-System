@@ -10,6 +10,7 @@
         <main sec:authenticated="name">
             <section sec:authorize="hasRole('ADMIN')">
                 <h2>My courses</h2>
+                <div th:if="${successMessage != null}" th:text="${successMessage}"></div>
                 <table th:unless="${courses.empty}">
                     <thead>
                         <tr>
@@ -23,11 +24,10 @@
                             <td th:text="${course.title}"></td>
                             <td><a th:href="@{/courses/{id}(id=${course.id})}">Go</a></td>
                             <td>
-                                <form th:action="@{/admin/update/{id}(id=${course.id})}" th:method="POST">
-                                    <button type="submit">Edit</button>
-                                </form>
-                                <form th:action="@{/admin/delete/{id}(id=${course.id})}" th:method="POST">
-                                    <button type="submit">Delete</button>
+                                <a th:href="@{/admin/edit/{id}(id=${course.id})}">Editar</a>
+                                <form th:action="@{/admin/delete/{id}(id=${course.id})}" th:method="POST" 
+                                    onsubmit="return confirm('¿Estás seguro de eliminar este curso?');">
+                                  <button type="submit">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -44,7 +44,7 @@
                     </div>
                     <div>
                         <label>Description</label>
-                        <textarea name="description" id="description" th:field="*{description}"><textarea>
+                        <textarea name="description" id="description" th:field="*{description}"></textarea>
                         <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
                     </div>
                     <button type="submit">Create course</button>
