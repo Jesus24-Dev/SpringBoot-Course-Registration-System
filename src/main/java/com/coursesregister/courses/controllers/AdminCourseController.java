@@ -43,19 +43,19 @@ public class AdminCourseController {
         }
         
         courseService.createCourse(course.getTitle(), course.getDescription(), course.getUsername());     
-        return "courses?created=true";
+        return "redirect:courses?created=true";
     }
     
     @PostMapping("/create/{id}")
     public String updateCourseDescription(@PathVariable UUID id, String description){
         courseService.updateCourseDescription(description, id);
         
-        return "courses?updated=true";
+        return "redirect:courses?updated=true";
     }
     
     @PostMapping("/delete/{id}")
     public String deleteCourse(@PathVariable UUID id){
         courseService.deleteCourse(id);
-        return "courses?deleted=true";
+        return "redirect:courses?deleted=true";
     }
 }
