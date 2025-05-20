@@ -7,8 +7,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>
-            <p sec:authentication="name">Welcome, user: <span sec:authentication="principal.username"></span></p>
+        <div sec:authorize="hasRole('ADMIN')">
+            Welcome, Admin.
+            <a th:href="@{/admin/courses}">See my courses</a>
+        </div>
+        <div sec:authorize="hasRole('USER')">
+            Welcome, User.
+            <a th:href="@{/courses}">See my courses</a>
         </div>
     </body>
 </html>
