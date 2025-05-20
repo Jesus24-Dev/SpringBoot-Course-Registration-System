@@ -14,7 +14,6 @@ public class CourseRequest {
     @Size(min = 10, message = "The description requires a minimum of 6 characters")
     private String description;
     
-    @NotBlank(message = "Username can't be empty.")
     private String username;
 
     public String getTitle() {
