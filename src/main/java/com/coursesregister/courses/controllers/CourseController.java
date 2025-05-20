@@ -38,6 +38,6 @@ public class CourseController {
     public String courseDetail(Model model, @PathVariable UUID id){
         Course course = courseService.getCourseById(id);
         model.addAttribute("course", course);
-        return "course-detail";
+        return "course-details";
     }
 }
