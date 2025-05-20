@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Editar Curso</title>
+</head>
+<body>
+    <section sec:authorize="hasRole('ADMIN')">
+        <h2>Edit course</h2>
+        
+        <form th:action="@{/admin/update/{id}(id=${course.id})}" th:method="POST" th:object="${course}">
+            <div>
+                <label>Description</label>
+                <textarea th:field="*{description}"></textarea>
+                <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+            </div>
+            <button type="submit">Save changes</button>
+            <a th:href="@{/admin/courses}">Cancel</a>
+        </form>
+    </section>
+</body>
+</html>
