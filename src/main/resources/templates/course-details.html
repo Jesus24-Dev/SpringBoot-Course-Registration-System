@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>A specific course here.</div>
+        <main>
+            <h2 th:text="${course.title}"></h2>
+            <p th:text="${course.description}"></p>
+            <section th:unless="${course.coursesEnrollments.empty}">
+                <h3>Users registers</h3>
+                <ul th:each="enroll : course.coursesEnrollments">
+                    <li th:text="enroll.user.username"></li>
+                </ul>
+            </section>
+            <section th:if="${course.coursesEnrollments.empty}">
+                <h3>There isn't users registered yet.</h3>
+            </section>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/courses}">Back</a>
+            <a sec:authorize="hasRole('USER')" th:href="@{/courses}">Back</a>
+        </main> 
     </body>
 </html>
