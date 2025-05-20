@@ -39,6 +39,6 @@ public class AuthController {
             return "register";
         }
         userService.registerUser(user.getUsername(), user.getPassword(), user.getRoles());
-        return "login";
+        return "redirect:login?created=true";
     }
 }
