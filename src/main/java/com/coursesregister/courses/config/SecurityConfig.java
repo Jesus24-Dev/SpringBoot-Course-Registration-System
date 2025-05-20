@@ -14,13 +14,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/public/**").permitAll()
+                .requestMatchers("/login", "/public/**", "/register").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
                 .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/auth")
-                .defaultSuccessUrl("/home")
+                .defaultSuccessUrl("/home", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
                 )
@@ -32,6 +34,12 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(ex -> ex
                 .accessDeniedPage("/access-denied")
+                )
+                .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/h2-console/**")
+                )
+                .headers(headers -> headers
+                    .frameOptions(frame -> frame.disable())
                 );
         return http.build(); 
     }
