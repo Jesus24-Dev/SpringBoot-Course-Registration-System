@@ -38,6 +38,13 @@ public class AdminCourseController {
         return "courses"; 
     }
     
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable UUID id, Model model) {
+        Course course = courseService.getCourseById(id);
+        model.addAttribute("course", course);
+        return "edit-course";
+    }
+    
     @PostMapping("/create")
     public String createCourse(@Valid @ModelAttribute("course") CourseRequest course, 
                                BindingResult result, 
